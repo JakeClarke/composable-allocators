@@ -103,11 +103,8 @@ public:
 	}
 
 	bool reallocate(Block &blk, size_t delta) {
-		const auto neededSize = goodSize(blk.size+delta);
-		const auto blocksNeeded = neededSize/blockSize;
-
-		return false;
-
+		// todo: expand existing blk.
+		return utils::move<decltpye(this), decltype(this)>(blk, delta);
 	}
 
 	~BitMapAlloc(){
