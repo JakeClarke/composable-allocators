@@ -19,6 +19,10 @@ public:
 		return false;
 	}
 
+	bool reallocate(Block &, size_t) {
+		return false;
+	}
+
 	constexpr static size_t goodSize(size_t) {
 		return 0;
 	}

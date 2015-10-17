@@ -91,7 +91,8 @@ public:
 	static_assert(blockSize % alignment() == 0, "Blocks must be aligned");
 
 	constexpr static size_t goodSize(size_t a) {
-		return a  + (blockSize - (a % blockSize));
+		auto rem = a % blockSize;
+		return a  + (blockSize - rem);
 	}
 
 	bool owns(Block blk) {
@@ -99,6 +100,14 @@ public:
 			return true;
 		}
 		return false;
+	}
+
+	bool reallocate(Block &blk, size_t delta) {
+		const auto neededSize = goodSize(blk.size+delta);
+		const auto blocksNeeded = neededSize/blockSize;
+
+		return false;
+
 	}
 
 	~BitMapAlloc(){

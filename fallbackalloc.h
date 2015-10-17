@@ -26,6 +26,25 @@ public:
   	}
   }
 
+  bool reallocate(Block &blk, size_t delta) {
+  	if (primary::owns(blk)) {
+  		auto ret = primary::reallocate(blk, delta);
+  		if (ret) {
+  			return true;
+  		}
+
+  		return utils::move<secondary,primary>(blk, delta);
+
+  	} else {
+  		if (utils::move<primary,secondary>(blk, delta))
+  		{
+  			return true;
+  		}
+
+  		return secondary::reallocate(blk, delta);
+  	}
+  }
+
   void owns(Block blk) {
   	return primary::owns(blk) || secondary::owns(blk);
   }
