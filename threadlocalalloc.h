@@ -17,6 +17,10 @@ public:
 		return tll.owns(blk);
 	}
 
+	bool reallocate(Block &blk, size_t delta) {
+		return tll.reallocate(blk, delta);
+	}
+
 	static constexpr size_t goodSize(size_t size) {
 		return tll.goodSize(size);
 	}
