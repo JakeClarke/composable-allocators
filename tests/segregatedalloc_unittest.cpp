@@ -47,15 +47,30 @@ TEST(segregatedSmall, allocatefail) {
 
 TEST(segregatedSmall, reallocate) {
 	AllocSmall myAlloc;
-	const auto expectedSize = sizeof(char) * 100;
-	auto blk = myAlloc.allocate(expectedSize);
+	const auto startSize = sizeof(char) * 100;
+	auto blk = myAlloc.allocate(startSize);
 	ASSERT_NE(blk.ptr, nullptr);
-	EXPECT_GE(blk.size, expectedSize);
+	EXPECT_GE(blk.size, startSize);
 
 	const auto delta = sizeof(char) * 100;
 	ASSERT_TRUE(myAlloc.reallocate(blk, delta));
 	ASSERT_NE(blk.ptr, nullptr);
-	ASSERT_GE(blk.size, expectedSize + delta);
+	ASSERT_GE(blk.size, startSize + delta);
+}
+
+TEST(segregatedSmall, reallocateFail) {
+	AllocSmall myAlloc;
+	const auto startSize = sizeof(char) * 100;
+	auto blk = myAlloc.allocate(startSize);
+	ASSERT_NE(blk.ptr, nullptr);
+	EXPECT_GE(blk.size, startSize);
+
+	auto oldBlk = blk;
+	const auto delta = sizeof(char) * 2015;
+	ASSERT_GT(startSize + delta, threshold);
+	ASSERT_FALSE(myAlloc.reallocate(blk, delta));
+	ASSERT_EQ(blk.size,  oldBlk.size);
+	ASSERT_EQ(blk.ptr, oldBlk.ptr);
 }
 
 TEST(segregatedSmall, owns) {
@@ -67,6 +82,19 @@ TEST(segregatedSmall, owns) {
 	
 	ASSERT_TRUE(myAlloc.owns(blk));
 	// leaky
+}
+
+// This test is kind of a cludge:
+// NullAlloc will always say it doesn't own something.
+// using a small object to always hit it.
+TEST(segregatedSmall, doesntOwn) {
+	const auto smallMem = sizeof(char) * 100;
+	Block smallBlk = {nullptr, smallMem};
+	ASSERT_GE(smallBlk.size, smallMem);
+	ASSERT_LT(smallBlk.size, threshold);
+
+	AllocBig myAlloc;
+	ASSERT_FALSE(myAlloc.owns(smallBlk));
 }
 
 TEST(segregatedSmall, goodSize) {
