@@ -17,7 +17,7 @@ GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 
 TARGET =	alloc-tests
 
-TESTS = mallocatortest nullallocator_unittests
+TESTS = mallocator_unittests nullallocator_unittests
 
 TESTS_DIR = tests
 
@@ -49,10 +49,10 @@ gtest_main.a: gtest-all.o gtest_main.o
 
 # My tests
 
-mallocatortest.o: $(TESTS_DIR)/mallocatortest.cpp $(GTEST_HEADERS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/mallocatortest.cpp
+mallocator_unittests.o: $(TESTS_DIR)/mallocator_unittests.cpp $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/mallocator_unittests.cpp
 
-mallocatortest: gtest_main.a mallocatortest.o
+mallocator_unittests: gtest_main.a mallocator_unittests.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 	./$@
 
