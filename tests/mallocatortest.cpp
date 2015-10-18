@@ -37,3 +37,9 @@ TEST(mallacator, owns) {
 	ASSERT_TRUE(myAlloc.owns(blk));
 	// leaky
 }
+
+TEST(mallacator, goodSize) {
+	const auto s = sizeof(char) * 100;
+
+	ASSERT_GE(Mallocator::goodSize(s), s);
+}
