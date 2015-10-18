@@ -1,6 +1,9 @@
 #ifndef _H_MALLOCATOR
 #define _H_MALLOCATOR
 
+#include "alloc-common.h"
+#include <cstdlib>
+
 class Mallocator {
  public:
   Block allocate(size_t size) {
