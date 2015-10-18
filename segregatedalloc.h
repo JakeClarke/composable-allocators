@@ -19,7 +19,7 @@ class SegregatedAlloc : private small, private big {
     }
   }
 
-  void owns(Block blk) {
+  bool owns(Block blk) {
     if (blk.size < thresshold) {
       return small::owns(blk);
     }

@@ -17,7 +17,7 @@ GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 
 TARGET =	alloc-tests
 
-TESTS = mallocator_unittests nullallocator_unittests fallbackalloc_unittests
+TESTS = mallocator_unittests nullallocator_unittests fallbackalloc_unittests segregatedalloc_unittest
 
 TESTS_DIR = tests
 
@@ -47,8 +47,8 @@ gtest_main.o: $(GTEST_SRCS_)
 gtest_main.a: gtest-all.o gtest_main.o
 	$(AR) $(ARFLAGS) $@ $^
 
-# My tests
-
+## My tests
+# malloc tests
 mallocator_unittests.o: $(TESTS_DIR)/mallocator_unittests.cpp $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/mallocator_unittests.cpp
 
@@ -56,6 +56,7 @@ mallocator_unittests: gtest_main.a mallocator_unittests.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 	./$@
 
+# null alloc tests
 nullallocator_unittests.o: $(TESTS_DIR)/nullallocator_unittests.cpp $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/nullallocator_unittests.cpp
 
@@ -63,9 +64,18 @@ nullallocator_unittests: gtest_main.a nullallocator_unittests.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 	./$@
 
+# fall back tests
 fallbackalloc_unittests.o: $(TESTS_DIR)/fallbackalloc_unittests.cpp $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/fallbackalloc_unittests.cpp
 
 fallbackalloc_unittests: gtest_main.a fallbackalloc_unittests.o
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	./$@
+
+# segregated tests
+segregatedalloc_unittest.o: $(TESTS_DIR)/segregatedalloc_unittest.cpp $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/segregatedalloc_unittest.cpp
+
+segregatedalloc_unittest: gtest_main.a segregatedalloc_unittest.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 	./$@
