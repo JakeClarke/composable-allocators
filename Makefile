@@ -17,7 +17,7 @@ GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 
 TARGET =	alloc-tests
 
-TESTS = mallocator_unittests nullallocator_unittests
+TESTS = mallocator_unittests nullallocator_unittests fallbackalloc_unittests
 
 TESTS_DIR = tests
 
@@ -60,5 +60,12 @@ nullallocator_unittests.o: $(TESTS_DIR)/nullallocator_unittests.cpp $(GTEST_HEAD
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/nullallocator_unittests.cpp
 
 nullallocator_unittests: gtest_main.a nullallocator_unittests.o
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	./$@
+
+fallbackalloc_unittests.o: $(TESTS_DIR)/fallbackalloc_unittests.cpp $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/fallbackalloc_unittests.cpp
+
+fallbackalloc_unittests: gtest_main.a fallbackalloc_unittests.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 	./$@

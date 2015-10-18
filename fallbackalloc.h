@@ -44,7 +44,7 @@ public:
   	}
   }
 
-  void owns(Block blk) {
+  bool owns(Block blk) {
   	return primary::owns(blk) || secondary::owns(blk);
   }
 
