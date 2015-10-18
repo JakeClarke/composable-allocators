@@ -37,7 +37,11 @@ class FreeListAlloc {
     }
   }
 
-  void owns(Block) { return usedSlots < numSlots; }
+  bool reallocate(Block &blk, size_t delta) {
+  	return false;
+  }
+
+  bool owns(Block) { return usedSlots < numSlots; }
 
   constexpr static size_t goodSize(size_t size) { return size; }
 

@@ -30,5 +30,11 @@ int main(int argc, char const *argv[]){
 	} else {
 		std::cout << "allocated: " << std::hex << blk.ptr << ", size:" << blk.size << " bytes."<< std::endl;
 	}
+
+	if (myAlloc.reallocate(blk, 2411)) {
+		std::cout << "reallocated: " << blk.ptr << ", size:" << blk.size << " bytes."<< std::endl;
+	} else {
+		std::cout << "failed to reallocate" << std::endl;
+	}
 	return 0;
 }

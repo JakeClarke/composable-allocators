@@ -28,15 +28,14 @@ public:
 
   bool reallocate(Block &blk, size_t delta) {
   	if (primary::owns(blk)) {
-  		auto ret = primary::reallocate(blk, delta);
-  		if (ret) {
+  		if (primary::reallocate(blk, delta)) {
   			return true;
   		}
 
-  		return utils::move<secondary,primary>(blk, delta);
+  		return utils::move<secondary,primary>(this, this, blk, delta);
 
   	} else {
-  		if (utils::move<primary,secondary>(blk, delta))
+  		if (utils::move<primary,secondary>(this, this, blk, delta))
   		{
   			return true;
   		}

@@ -32,7 +32,7 @@ class SegregatedAlloc : private small, private big {
         return small::reallocate(blk, delta);
       }
 
-      return utils::move<big, small>(blk, delta);
+      return utils::move<big, small>(this,this,blk, delta);
 
     } else {
       return big::reallocate(blk, delta);

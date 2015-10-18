@@ -12,17 +12,18 @@ struct Block {
 namespace utils {
 void copy(Block dst, Block src) { memcpy(dst.ptr, src.ptr, src.size); }
 
-template <class dst, class src> 
-bool move(Block &blk, size_t delta) {
-  auto newBlk = dst::allocate(blk.size + delta);
+template <class dst_t, class src_t> 
+bool move(dst_t *dst, src_t *src, Block &blk, size_t delta) {
+  auto newBlk = dst->allocate(blk.size + delta);
   if (newBlk.ptr == nullptr) {
     return false;
   }
   copy(newBlk, blk);
-  src::deallocate(blk);
+  src->deallocate(blk);
   blk = newBlk;
   return true;
 }
+
 }
 
 #endif

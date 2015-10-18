@@ -22,7 +22,7 @@ public:
 	}
 
 	static constexpr size_t goodSize(size_t size) {
-		return threadlocalallo::goodSize(size);
+		return threadlocalalloc::goodSize(size);
 	}
 private:
 	static thread_local threadlocalalloc tll;

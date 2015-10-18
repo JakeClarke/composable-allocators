@@ -34,7 +34,7 @@ private:
 	}
 
 	size_t getBlkNum(void * ptr) {
-		return ((size_t)(((char *)ptr) - root.ptr))/ blockSize;
+		return ((size_t)ptr - (size_t)root.ptr)/ blockSize;
 	}
 
 	static constexpr size_t getMapByteNum(size_t num) {
@@ -78,8 +78,11 @@ public:
 	}
 
 	void deallocate(Block blk) {
+		assert(owns(blk));
 		std::lock_guard<std::mutex> lock(mapMutex);
-		for(size_t i = getBlkNum(blk); i < getBlkNum(blk) + (blk.size / blockSize); i++) {
+		const auto startNum = getBlkNum(blk.ptr);
+		const auto endNum = startNum + blk.size / blockSize;
+		for(size_t i = startNum; i < endNum; i++) {
 			markFree(i);
 		}
 	}
@@ -96,7 +99,7 @@ public:
 	}
 
 	bool owns(Block blk) {
-		if (((char *)blk.ptr - root.ptr) % blockSize == 0) {
+		if (((size_t)blk.ptr - (size_t)root.ptr) % blockSize == 0) {
 			return true;
 		}
 		return false;
@@ -104,7 +107,7 @@ public:
 
 	bool reallocate(Block &blk, size_t delta) {
 		// todo: expand existing blk.
-		return utils::move<decltpye(this), decltype(this)>(blk, delta);
+		return utils::move(this,this,blk, delta);
 	}
 
 	~BitMapAlloc(){
