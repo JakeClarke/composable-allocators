@@ -3,9 +3,10 @@
 
 #include <gtest/gtest.h>
 
+using AllocToTest = Mallocator;
 
 TEST(mallacator, allocate) {
-	Mallocator myAlloc;
+	AllocToTest myAlloc;
 	const auto expectedSize = sizeof(char) * 100;
 	auto blk = myAlloc.allocate(expectedSize);
 	ASSERT_NE(blk.ptr, nullptr);
@@ -15,7 +16,7 @@ TEST(mallacator, allocate) {
 }
 
 TEST(mallacator, reallocate) {
-	Mallocator myAlloc;
+	AllocToTest myAlloc;
 	const auto expectedSize = sizeof(char) * 100;
 	auto blk = myAlloc.allocate(expectedSize);
 	ASSERT_NE(blk.ptr, nullptr);
@@ -28,7 +29,7 @@ TEST(mallacator, reallocate) {
 }
 
 TEST(mallacator, owns) {
-	Mallocator myAlloc;
+	AllocToTest myAlloc;
 	const auto expectedSize = sizeof(char) * 100;
 	auto blk = myAlloc.allocate(expectedSize);
 	ASSERT_NE(blk.ptr, nullptr);
@@ -41,5 +42,5 @@ TEST(mallacator, owns) {
 TEST(mallacator, goodSize) {
 	const auto s = sizeof(char) * 100;
 
-	ASSERT_GE(Mallocator::goodSize(s), s);
+	ASSERT_GE(AllocToTest::goodSize(s), s);
 }
