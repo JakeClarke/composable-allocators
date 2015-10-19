@@ -67,3 +67,21 @@ TEST(AllocWrapper, dataStart) {
 	auto blk = AllocToTest::getBlock(ptr);
 	ASSERT_EQ(ptr, AllocToTest::getDataBegin(blk));
 }
+
+TEST(AllocWrapper, reallocate) {
+	const size_t size = 100 * sizeof(char);
+	const size_t allocSize = AllocToTest::goodSize(size);
+
+	AllocToTest myAlloc;
+	auto ptr = myAlloc.allocate(size);
+	ASSERT_NE(nullptr, ptr);
+	auto blk = AllocToTest::getBlock(ptr);
+
+	auto newAllocSize = allocSize * 2;
+	auto newPtr = myAlloc.reallocate(ptr, newAllocSize);
+	ASSERT_NE(nullptr, newPtr);
+
+	auto newBlk = AllocToTest::getBlock(ptr);
+	ASSERT_GE(newBlk.size, newAllocSize);
+
+}

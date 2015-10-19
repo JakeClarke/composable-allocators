@@ -19,20 +19,12 @@ template <class alloc>
 class AllocWrapper : private alloc {
  public:
   void* allocate(size_t size, const char* tag) {
-    const auto neededSize = goodSize(size);
-    auto blk = alloc::allocate(neededSize);
+    auto blk = alloc::allocate(goodSize(size));
     if (blk.ptr == nullptr) {
       return nullptr;
     }
 
-    MemHeader* hdr = getHeader(blk);
-    hdr->size = blk.size;
-
-    MemTailer* tlr = getTailer(blk);
-    memset(tlr, 0, sizeof(*tlr));
-    if (tag != nullptr) {
-      std::strncpy(tlr->tag, tag, TAILER_TAG_SIZE - 1);
-    }
+    putMetaData(blk, tag);
 
     // return the start of the allocation.
     return getDataBegin(blk);
@@ -41,6 +33,20 @@ class AllocWrapper : private alloc {
   void* allocate(size_t size) { return allocate(size, nullptr); }
 
   void deallocate(void* ptr) { alloc::deallocate(getBlock(ptr)); }
+
+  void * reallocate(void * ptr, size_t size) {
+  	auto blk = getBlock(ptr);
+  	if (blk.size >= size) {
+  		return getDataBegin(blk);
+  	}
+
+  	auto *tlr = getTailer(ptr);
+  	if(alloc::reallocate(blk, size - blk.size)) {
+  		putMetaData(blk, tlr->tag);
+  		return getDataBegin(blk);
+  	}
+  	return nullptr;
+  }
 
   static MemTailer* getTailer(void* ptr) {
     const size_t tailOffset =
@@ -87,6 +93,18 @@ class AllocWrapper : private alloc {
   }
 
   static constexpr size_t alignment() { return 16; }
+
+private:
+static void putMetaData(const Block blk, const char * tag) {
+  	MemHeader* hdr = getHeader(blk);
+    hdr->size = blk.size;
+
+    MemTailer* tlr = getTailer(blk);
+    memset(tlr, 0, sizeof(*tlr));
+    if (tag != nullptr) {
+      std::strncpy(tlr->tag, tag, TAILER_TAG_SIZE - 1);
+    }
+  }
 };
 
 #endif
