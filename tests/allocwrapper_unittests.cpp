@@ -27,5 +27,5 @@ TEST(AllocWrapper, goodSize) {
 
 TEST(AllocWrapper, goodSizeAligned) {
 	const size_t size = sizeof(char) * 100;
-	ASSERT_GE(AllocToTest::goodSize(size) % AllocToTest::alignment(), 0);
+	ASSERT_EQ(AllocToTest::goodSize(size) % AllocToTest::alignment(), 0);
 }
