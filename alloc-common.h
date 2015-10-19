@@ -9,6 +9,11 @@ struct Block {
   size_t size;
 };
 
+struct Header
+{
+	size_t size;
+};
+
 namespace utils {
 void copy(Block dst, Block src) { memcpy(dst.ptr, src.ptr, src.size); }
 
@@ -24,6 +29,9 @@ bool move(dst_t *dst, src_t *src, Block &blk, size_t delta) {
   return true;
 }
 
+constexpr size_t roundToAlignment(size_t size, size_t allign) {
+	return size + (allign - (size % allign));
+}
 }
 
 #endif

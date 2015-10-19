@@ -17,7 +17,7 @@ GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 
 TARGET =	alloc-tests
 
-TESTS = mallocator_unittests nullallocator_unittests fallbackalloc_unittests segregatedalloc_unittest
+TESTS = mallocator_unittests nullallocator_unittests fallbackalloc_unittests segregatedalloc_unittest allocwrapper_unittests
 
 TESTS_DIR = tests
 
@@ -77,5 +77,13 @@ segregatedalloc_unittest.o: $(TESTS_DIR)/segregatedalloc_unittest.cpp $(GTEST_HE
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/segregatedalloc_unittest.cpp
 
 segregatedalloc_unittest: gtest_main.a segregatedalloc_unittest.o
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	./$@
+
+# wrapper tests
+allocwrapper_unittests.o: $(TESTS_DIR)/allocwrapper_unittests.cpp $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/allocwrapper_unittests.cpp
+
+allocwrapper_unittests: gtest_main.a allocwrapper_unittests.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 	./$@
