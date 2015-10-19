@@ -81,7 +81,7 @@ segregatedalloc_unittest: gtest_main.a segregatedalloc_unittest.o
 	./$@
 
 # wrapper tests
-allocwrapper_unittests.o: $(TESTS_DIR)/allocwrapper_unittests.cpp $(GTEST_HEADERS)
+allocwrapper_unittests.o: $(TESTS_DIR)/allocwrapper_unittests.cpp allocwrapper.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/allocwrapper_unittests.cpp
 
 allocwrapper_unittests: gtest_main.a allocwrapper_unittests.o

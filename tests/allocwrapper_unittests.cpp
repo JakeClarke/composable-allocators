@@ -85,3 +85,16 @@ TEST(AllocWrapper, reallocate) {
 	ASSERT_GE(newBlk.size, newAllocSize);
 
 }
+
+TEST(AllocWrapper, owns) {
+	// This is a bit of a non test.
+	// The Mallocator will always say true.
+	// TODO: Use a different backing allocator.
+
+	AllocToTest myAlloc;
+	const size_t size = sizeof(char) * 100;
+	auto ptr = myAlloc.allocate(size);
+	ASSERT_NE(ptr, nullptr);
+
+	ASSERT_TRUE(myAlloc.owns(ptr));
+}

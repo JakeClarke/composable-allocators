@@ -34,23 +34,29 @@ class AllocWrapper : private alloc {
 
   void deallocate(void* ptr) { alloc::deallocate(getBlock(ptr)); }
 
-  void * reallocate(void * ptr, size_t size) {
-  	auto blk = getBlock(ptr);
-  	if (blk.size >= size) {
-  		return getDataBegin(blk);
-  	}
+  void* reallocate(void* ptr, size_t size) {
+    auto blk = getBlock(ptr);
+    if (blk.size >= size) {
+      return getDataBegin(blk);
+    }
 
-  	auto *tlr = getTailer(ptr);
-  	if(alloc::reallocate(blk, size - blk.size)) {
-  		putMetaData(blk, tlr->tag);
-  		return getDataBegin(blk);
-  	}
-  	return nullptr;
+    auto* tlr = getTailer(ptr);
+    if (alloc::reallocate(blk, size - blk.size)) {
+      putMetaData(blk, tlr->tag);
+      return getDataBegin(blk);
+    }
+    return nullptr;
+  }
+
+  bool owns(void* ptr) {
+  	return alloc::owns(getBlock(ptr));
   }
 
   static MemTailer* getTailer(void* ptr) {
     const size_t tailOffset =
-        getHeader(ptr)->size - (sizeof(MemTailer) + utils::roundToAlignment(sizeof(MemHeader), alignment()));
+        getHeader(ptr)->size -
+        (sizeof(MemTailer) +
+         utils::roundToAlignment(sizeof(MemHeader), alignment()));
     auto tlrPtr = (char*)ptr;
     tlrPtr = tlrPtr + tailOffset;
     return (MemTailer*)tlrPtr;
@@ -83,8 +89,9 @@ class AllocWrapper : private alloc {
   }
 
   static constexpr size_t goodSize(size_t size) {
-    return utils::roundToAlignment(sizeof(MemHeader), alignment()) +
-           utils::roundToAlignment(size + sizeof(MemTailer), alignment());
+    return alloc::goodSize(
+        utils::roundToAlignment(sizeof(MemHeader), alignment()) +
+        utils::roundToAlignment(size + sizeof(MemTailer), alignment()));
   }
 
   static constexpr size_t dataSize(Block blk) {
@@ -94,9 +101,9 @@ class AllocWrapper : private alloc {
 
   static constexpr size_t alignment() { return 16; }
 
-private:
-static void putMetaData(const Block blk, const char * tag) {
-  	MemHeader* hdr = getHeader(blk);
+ private:
+  static void putMetaData(const Block blk, const char* tag) {
+    MemHeader* hdr = getHeader(blk);
     hdr->size = blk.size;
 
     MemTailer* tlr = getTailer(blk);
