@@ -27,5 +27,19 @@ TEST(AllocWrapper, goodSize) {
 
 TEST(AllocWrapper, goodSizeAligned) {
 	const size_t size = sizeof(char) * 100;
-	ASSERT_EQ(AllocToTest::goodSize(size) % AllocToTest::alignment(), 0);
+	ASSERT_EQ(0, AllocToTest::goodSize(size) % AllocToTest::alignment());
+}
+
+#define TAG_STR "test-tag"
+
+TEST(AllocWrapper, setsTag) {
+	size_t size = 100 * sizeof(char);
+
+	AllocToTest myAlloc;
+	auto ptr = myAlloc.allocate(size, TAG_STR);
+	ASSERT_NE(nullptr, ptr);
+
+	auto tlr = AllocToTest::getTailer(ptr);
+
+	ASSERT_STREQ(TAG_STR, tlr->tag);
 }
