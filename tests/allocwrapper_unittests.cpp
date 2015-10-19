@@ -43,3 +43,27 @@ TEST(AllocWrapper, setsTag) {
 
 	ASSERT_STREQ(TAG_STR, tlr->tag);
 }
+
+TEST(AllocWrapper, blockRecoverable) {
+	const size_t size = 100 * sizeof(char);
+	const size_t allocSize = AllocToTest::goodSize(size);
+
+	AllocToTest myAlloc;
+	auto ptr = myAlloc.allocate(size, TAG_STR);
+	ASSERT_NE(nullptr, ptr);
+
+	auto blk = AllocToTest::getBlock(ptr);
+	ASSERT_EQ(allocSize, blk.size);
+}
+
+TEST(AllocWrapper, dataStart) {
+	const size_t size = 100 * sizeof(char);
+	const size_t allocSize = AllocToTest::goodSize(size);
+
+	AllocToTest myAlloc;
+	auto ptr = myAlloc.allocate(size, TAG_STR);
+	ASSERT_NE(nullptr, ptr);
+
+	auto blk = AllocToTest::getBlock(ptr);
+	ASSERT_EQ(ptr, AllocToTest::getDataBegin(blk));
+}
