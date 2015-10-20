@@ -6,6 +6,10 @@
 template <size_t stackSize>
 class StackAllocator {
 public:
+	StackAllocator():current(0) {
+
+	}
+
 	Block allocate(size_t size) {
 		if (current + goodSize(size) <= sizeof(char) * stackSize)
 		{
@@ -17,8 +21,7 @@ public:
 	}
 
 	void deallocate(Block blk) {
-		char *ptr = (char *)blk.ptr;
-		if(ptr == stack + current) {
+		if(lastAllocation(blk)) {
 			current -= blk.size;
 		}
 	}
@@ -27,6 +30,17 @@ public:
 		char *ptr = (char *)blk.ptr;
 		if (ptr >= stack && ptr < stack + stackSize) {
 			return true;
+		}
+		return false;
+	}
+
+	bool reallocate(Block &blk, size_t delta) {
+		const auto needDelta = goodSize(blk.size + delta) - blk.size;
+		if(lastAllocation(blk) &&
+			current + needDelta <= stackSize) {
+				current += needDelta;
+				blk.size = goodSize(blk.size + delta);
+				return true;
 		}
 		return false;
 	}
@@ -41,8 +55,17 @@ public:
 
 	static_assert(stackSize % allignment() == 0, "StackSize must be alligned");
 private:
+	bool lastAllocation(Block blk) {
+		if (blk.ptr == stack + (current - blk.size)) {
+			return true;
+		}
+
+		return false;
+	}
+
 	char stack[stackSize];
-	size_t current = 0;
+	size_t current;
+
 };
 
 #endif
