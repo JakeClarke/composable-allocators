@@ -87,3 +87,11 @@ allocwrapper_unittests.o: $(TESTS_DIR)/allocwrapper_unittests.cpp allocwrapper.h
 allocwrapper_unittests: gtest_main.a allocwrapper_unittests.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 	./$@
+
+# stackalloctor tests
+stackallocator_unittests.o: $(TESTS_DIR)/stackallocator_unittests.cpp stackallocator.h $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/stackallocator_unittests.cpp
+
+stackallocator_unittests: gtest_main.a stackallocator_unittests.o
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	./$@
