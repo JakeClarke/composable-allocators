@@ -75,7 +75,6 @@ TEST(AllocWrapper, blockRecoverable) {
 
 TEST(AllocWrapper, dataStart) {
 	const size_t size = 100 * sizeof(char);
-	const size_t allocSize = AllocToTest::goodSize(size);
 
 	AllocToTest myAlloc;
 	auto ptr = myAlloc.allocate(size, TAG_STR);
@@ -92,7 +91,6 @@ TEST(AllocWrapper, reallocate) {
 	AllocToTest myAlloc;
 	auto ptr = myAlloc.allocate(size);
 	ASSERT_NE(nullptr, ptr);
-	auto blk = AllocToTest::getBlock(ptr);
 
 	auto newAllocSize = allocSize * 2;
 	auto newPtr = myAlloc.reallocate(ptr, newAllocSize);
@@ -121,13 +119,16 @@ TEST(AllocWrapper, owns) {
 // but not actually do anything to the memory in question
 TEST(AllocWrapper, reallocateNotNeeded) {
 	AllocToTest myAlloc;
-	auto ptr = myAlloc.allocate(100);
+	const size_t size = sizeof(char) * 100;
+	auto ptr = myAlloc.allocate(size);
 	ASSERT_NE(nullptr, ptr);
 	auto blk = AllocToTest::getBlock(ptr);
 
-	auto newPtr = myAlloc.reallocate(ptr, sizeof(char) * 100);
-	ASSERT_NE(nullptr, ptr);
-	auto newBlk = AllocToTest::getBlock(ptr);
+	auto newPtr = myAlloc.reallocate(ptr, size);
+	ASSERT_NE(nullptr, newPtr);
+	ASSERT_EQ(ptr, newPtr);
+
+	auto newBlk = AllocToTest::getBlock(newPtr);
 
 	ASSERT_EQ(blk.ptr, newBlk.ptr);
 	ASSERT_EQ(blk.size, newBlk.size);
