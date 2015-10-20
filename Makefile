@@ -17,7 +17,7 @@ GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 
 TARGET =	alloc-tests
 
-TESTS = mallocator_unittests nullallocator_unittests fallbackalloc_unittests segregatedalloc_unittest allocwrapper_unittests
+TESTS = mallocator_unittests nullallocator_unittests fallbackalloc_unittests segregatedalloc_unittest allocwrapper_unittests stackallocator_unittests
 
 TESTS_DIR = tests
 
