@@ -44,6 +44,23 @@ TEST(AllocWrapper, setsTag) {
 	ASSERT_STREQ(TAG_STR, tlr->tag);
 }
 
+TEST(AllocWrapper, reallocPreservesTag) {
+
+	AllocToTest myAlloc;
+	auto ptr = myAlloc.allocate(100 * sizeof(char), TAG_STR);
+	ASSERT_NE(nullptr, ptr);
+
+	// make it allocate something fairly big to try to force the os to realloc.
+	auto newPtr = myAlloc.reallocate(ptr, 10*1024*1024* sizeof(char));
+	// TODO: use a segregated allocator, this should realloc across pools.
+	ASSERT_NE(nullptr, newPtr);
+	ASSERT_NE(ptr, newPtr);
+
+	auto tlr = AllocToTest::getTailer(newPtr);
+
+	ASSERT_STREQ(TAG_STR, tlr->tag);
+}
+
 TEST(AllocWrapper, blockRecoverable) {
 	const size_t size = 100 * sizeof(char);
 	const size_t allocSize = AllocToTest::goodSize(size);
