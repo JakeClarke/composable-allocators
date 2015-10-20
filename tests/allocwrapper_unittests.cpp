@@ -98,3 +98,20 @@ TEST(AllocWrapper, owns) {
 
 	ASSERT_TRUE(myAlloc.owns(ptr));
 }
+
+// This test attempts to reallocate a thing of the same length.
+// Reallocation should report sucessful, 
+// but not actually do anything to the memory in question
+TEST(AllocWrapper, reallocateNotNeeded) {
+	AllocToTest myAlloc;
+	auto ptr = myAlloc.allocate(100);
+	ASSERT_NE(nullptr, ptr);
+	auto blk = AllocToTest::getBlock(ptr);
+
+	auto newPtr = myAlloc.reallocate(ptr, sizeof(char) * 100);
+	ASSERT_NE(nullptr, ptr);
+	auto newBlk = AllocToTest::getBlock(ptr);
+
+	ASSERT_EQ(blk.ptr, newBlk.ptr);
+	ASSERT_EQ(blk.size, newBlk.size);
+}

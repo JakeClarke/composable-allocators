@@ -36,11 +36,11 @@ class AllocWrapper : private alloc {
 
   void* reallocate(void* ptr, size_t size) {
     auto blk = getBlock(ptr);
-    if (blk.size >= size) {
+    if (blk.size >= goodSize(size)) {
       return getDataBegin(blk);
     }
 
-    auto* tlr = getTailer(ptr);
+    auto tlr = getTailer(ptr);
     if (alloc::reallocate(blk, size - blk.size)) {
       putMetaData(blk, tlr->tag);
       return getDataBegin(blk);
@@ -48,9 +48,7 @@ class AllocWrapper : private alloc {
     return nullptr;
   }
 
-  bool owns(void* ptr) {
-  	return alloc::owns(getBlock(ptr));
-  }
+  bool owns(void* ptr) { return alloc::owns(getBlock(ptr)); }
 
   static MemTailer* getTailer(void* ptr) {
     const size_t tailOffset =
