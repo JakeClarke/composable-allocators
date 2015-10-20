@@ -40,13 +40,7 @@ class SegregatedAlloc : private small, private big {
   }
 
   constexpr static size_t goodSize(size_t size) {
-    size_t res = size;
-    if (size < thresshold) {
-      res = small::goodSize(size);
-    } else {
-      res = big::goodSize(size);
-    }
-    return res;
+    return (size < thresshold) ? small::goodSize(size) : big::goodSize(size);
   }
 };
 
