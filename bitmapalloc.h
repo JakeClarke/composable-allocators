@@ -14,8 +14,6 @@ private:
 	uint8_t map[numBlocks/8];
 
 	void markFree(size_t num) {
-		assert(isUsed(num));
-
 		map[getMapByteNum(num)] ^= getMapBit(num);
 	}
 
@@ -78,7 +76,6 @@ public:
 	}
 
 	void deallocate(Block blk) {
-		assert(owns(blk));
 		std::lock_guard<std::mutex> lock(mapMutex);
 		const auto startNum = getBlkNum(blk.ptr);
 		const auto endNum = startNum + blk.size / blockSize;
@@ -94,12 +91,13 @@ public:
 	static_assert(blockSize % alignment() == 0, "Blocks must be aligned");
 
 	constexpr static size_t goodSize(size_t a) {
-		auto rem = a % blockSize;
-		return a  + (blockSize - rem);
+		return a  + (blockSize - (a % blockSize));
 	}
 
 	bool owns(Block blk) {
-		if (((size_t)blk.ptr - (size_t)root.ptr) % blockSize == 0) {
+		if (blk.ptr >= root.ptr && 
+			blk.ptr <= ((char *)root.ptr) + (blockSize * numBlocks) &&
+			((char *)blk.ptr - (char *)root.ptr) % blockSize == 0) {
 			return true;
 		}
 		return false;

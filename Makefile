@@ -17,7 +17,7 @@ GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 
 TARGET =	alloc-tests
 
-TESTS = mallocator_unittests nullallocator_unittests fallbackalloc_unittests segregatedalloc_unittest allocwrapper_unittests stackallocator_unittests
+TESTS = mallocator_unittests nullallocator_unittests fallbackalloc_unittests segregatedalloc_unittest allocwrapper_unittests stackallocator_unittests bitmapalloc_unittests
 
 TESTS_DIR = tests
 
@@ -48,6 +48,7 @@ gtest_main.a: gtest-all.o gtest_main.o
 	$(AR) $(ARFLAGS) $@ $^
 
 ## My tests
+
 # malloc tests
 mallocator_unittests.o: $(TESTS_DIR)/mallocator_unittests.cpp mallocator.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/mallocator_unittests.cpp
@@ -93,5 +94,13 @@ stackallocator_unittests.o: $(TESTS_DIR)/stackallocator_unittests.cpp stackalloc
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/stackallocator_unittests.cpp
 
 stackallocator_unittests: gtest_main.a stackallocator_unittests.o
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	./$@
+
+# bitmap alloc tests
+bitmapalloc_unittests.o: $(TESTS_DIR)/bitmapalloc_unittests.cpp bitmapalloc.h $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/bitmapalloc_unittests.cpp
+
+bitmapalloc_unittests: gtest_main.a bitmapalloc_unittests.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 	./$@

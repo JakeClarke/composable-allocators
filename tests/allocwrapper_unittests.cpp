@@ -118,8 +118,9 @@ TEST(AllocWrapper, owns) {
 // Reallocation should report sucessful, 
 // but not actually do anything to the memory in question
 TEST(AllocWrapper, reallocateNotNeeded) {
-	AllocToTest myAlloc;
 	const size_t size = sizeof(char) * 100;
+	AllocToTest myAlloc;
+	
 	auto ptr = myAlloc.allocate(size);
 	ASSERT_NE(nullptr, ptr);
 	auto blk = AllocToTest::getBlock(ptr);
