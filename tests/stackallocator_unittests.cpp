@@ -44,3 +44,8 @@ TEST(StackAllocator, reallocate) {
 	ASSERT_TRUE(myAlloc.reallocate(blk, delta));
 	ASSERT_GE(blk.size, size+delta);
 }
+
+TEST(StackAllocator, doesntOwn) {
+	AllocToTest myAlloc;
+	ASSERT_FALSE(myAlloc.owns({nullptr, 0}));
+}
