@@ -23,8 +23,8 @@ public:
 		return false;
 	}
 
-	constexpr static size_t goodSize(size_t) {
-		return 0;
+	constexpr static size_t goodSize(size_t size) {
+		return size;
 	}
 
 };

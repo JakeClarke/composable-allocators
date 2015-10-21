@@ -39,5 +39,5 @@ TEST(nullalloc, doesNotOwn) {
 TEST(nullalloc, goodSize) {
 	const auto s = sizeof(char) * 100;
 
-	ASSERT_EQ(AllocToTest::goodSize(s), 0);
+	ASSERT_EQ(AllocToTest::goodSize(s), s);
 }
