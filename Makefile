@@ -13,7 +13,7 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
 
 GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 
-TESTS = mallocator_unittests nullallocator_unittests fallbackalloc_unittests segregatedalloc_unittests allocwrapper_unittests stackallocator_unittests bitmapalloc_unittests
+TESTS = mallocator_unittests nullallocator_unittests fallbackalloc_unittests segregatedalloc_unittests allocwrapper_unittests stackallocator_unittests bitmapalloc_unittests threadlocal_unittests
 
 TESTS_DIR = tests
 
@@ -95,5 +95,13 @@ bitmapalloc_unittests.o: $(TESTS_DIR)/bitmapalloc_unittests.cpp bitmapalloc.h $(
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/bitmapalloc_unittests.cpp
 
 bitmapalloc_unittests: gtest_main.a bitmapalloc_unittests.o
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	./$@
+
+# Thread local unit tests
+threadlocal_unittests.o: $(TESTS_DIR)/threadlocal_unittests.cpp bitmapalloc.h $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/threadlocal_unittests.cpp
+
+threadlocal_unittests: gtest_main.a threadlocal_unittests.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 	./$@

@@ -1,6 +1,8 @@
 #ifndef _H_THREAD_LOCAL_ALLOC
 #define _H_THREAD_LOCAL_ALLOC
 
+#include "alloc-common.h"
+
 template<typename threadlocalalloc>
 class ThreadLocalAlloc
 {
