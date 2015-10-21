@@ -10,7 +10,6 @@ template<class backing, size_t blockSize, size_t numBlocks>
 class BitMapAlloc: private backing {
 private:
 	Block root;
-	std::mutex mapMutex;
 	uint8_t map[numBlocks/8];
 
 	void markFree(size_t num) {
@@ -49,7 +48,6 @@ public:
 	}
 
 	Block allocate(size_t size) {
-		std::lock_guard<std::mutex> lock(mapMutex);
 		const auto blocksNeeded = goodSize(size)/blockSize;
 
 		for(size_t start = 0; start<numBlocks; start++) {
@@ -76,7 +74,6 @@ public:
 	}
 
 	void deallocate(Block blk) {
-		std::lock_guard<std::mutex> lock(mapMutex);
 		const auto startNum = getBlkNum(blk.ptr);
 		const auto endNum = startNum + blk.size / blockSize;
 		for(size_t i = startNum; i < endNum; i++) {
