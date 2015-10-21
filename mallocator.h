@@ -9,7 +9,7 @@ class Mallocator {
   Block allocate(size_t size) {
     auto ptr = malloc(size);
     if (ptr == nullptr) {
-      return {};
+      return {nullptr, 0};
     }
 
     return {ptr, size};
