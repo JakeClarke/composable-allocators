@@ -6,8 +6,6 @@ CXXFLAGS += -g -Wall -Wextra -pthread -std=c++11
 # the compiler doesn't generate warnings in Google Test headers.
 CPPFLAGS += -isystem $(GTEST_DIR)/include
 
-OBJS =	alloc-tests.o
-
 GTEST_DIR = googletest/googletest
 
 GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
@@ -15,20 +13,15 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
 
 GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 
-TARGET =	alloc-tests
-
 TESTS = mallocator_unittests nullallocator_unittests fallbackalloc_unittests segregatedalloc_unittests allocwrapper_unittests stackallocator_unittests bitmapalloc_unittests
 
 TESTS_DIR = tests
 
 # Target
 
-$(TARGET):	$(OBJS)
-	$(CXX) -o $(TARGET) $(OBJS) $(LIBS)
-
 test: $(TESTS)
 
-all:	$(TARGET) test
+all: test
 
 .PHONEY: clean
 
