@@ -8,40 +8,6 @@
 
 template<class backing, size_t blockSize, size_t numBlocks>
 class BitMapAlloc: private backing {
-private:
-	Block root;
-	uint8_t map[numBlocks/8];
-
-	void markFree(size_t num) {
-		map[getMapByteNum(num)] ^= getMapBit(num);
-	}
-
-	void markUsed(size_t num) {
-
-		map[getMapByteNum(num)] |= getMapBit(num);
-	}
-
-	bool isUsed(size_t num) {
-
-		return map[getMapByteNum(num)] & getMapBit(num);
-	}
-
-	void * getBlkPtr(size_t blkNum) {
-		return (void*)((char *)root.ptr + (blkNum * blockSize));
-	}
-
-	size_t getBlkNum(void * ptr) {
-		return ((size_t)ptr - (size_t)root.ptr)/ blockSize;
-	}
-
-	static constexpr size_t getMapByteNum(size_t num) {
-		return num / 8;
-	}
-
-	static constexpr size_t getMapBit(size_t num) {
-		return (1 << (8-(num % 8)));
-	}
-
 public:
 	BitMapAlloc():root(backing::allocate(numBlocks*blockSize)) {
 		assert(root.ptr != nullptr);
@@ -110,6 +76,40 @@ public:
 			backing::deallocate(root);
 			root = {nullptr, 0};
 		}
+	}
+
+	private:
+	Block root;
+	uint8_t map[numBlocks/8];
+
+	void markFree(size_t num) {
+		map[getMapByteNum(num)] ^= getMapBit(num);
+	}
+
+	void markUsed(size_t num) {
+
+		map[getMapByteNum(num)] |= getMapBit(num);
+	}
+
+	bool isUsed(size_t num) {
+
+		return map[getMapByteNum(num)] & getMapBit(num);
+	}
+
+	void * getBlkPtr(size_t blkNum) {
+		return (void*)((char *)root.ptr + (blkNum * blockSize));
+	}
+
+	size_t getBlkNum(void * ptr) {
+		return ((size_t)ptr - (size_t)root.ptr)/ blockSize;
+	}
+
+	static constexpr size_t getMapByteNum(size_t num) {
+		return num / 8;
+	}
+
+	static constexpr size_t getMapBit(size_t num) {
+		return (1 << (8-(num % 8)));
 	}
 };
 
