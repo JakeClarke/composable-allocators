@@ -4,6 +4,8 @@
 #include <cstddef>
 #include <cstring>
 
+namespace compalloc {
+
 struct Block {
   void *ptr;
   size_t size;
@@ -32,6 +34,7 @@ bool move(dst_t *dst, src_t *src, Block &blk, size_t delta) {
 constexpr size_t roundToAlignment(size_t size, size_t allign) {
 	return size + (allign - (size % allign));
 }
-}
+} // utils
+} // compalloc
 
 #endif

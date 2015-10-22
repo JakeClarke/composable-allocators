@@ -1,6 +1,10 @@
 #ifndef _H_SEGREGATED_ALLOC
 #define _H_SEGREGATED_ALLOC
 
+#include "alloc-common.h"
+
+namespace compalloc {
+
 template <typename small, typename big, size_t thresshold>
 class SegregatedAlloc : private small, private big {
  public:
@@ -32,7 +36,7 @@ class SegregatedAlloc : private small, private big {
         return small::reallocate(blk, delta);
       }
 
-      return utils::move<big, small>(this,this,blk, delta);
+      return utils::move<big, small>(this, this, blk, delta);
 
     } else {
       return big::reallocate(blk, delta);
@@ -43,5 +47,6 @@ class SegregatedAlloc : private small, private big {
     return (size < thresshold) ? small::goodSize(size) : big::goodSize(size);
   }
 };
+}
 
 #endif

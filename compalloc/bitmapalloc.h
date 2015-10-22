@@ -6,6 +6,8 @@
 #include <cassert>
 #include <mutex>
 
+namespace compalloc {
+
 template <class backing, size_t blockSize, size_t numBlocks>
 class BitMapAlloc : private backing {
  public:
@@ -100,5 +102,6 @@ class BitMapAlloc : private backing {
     return (1 << (8 - (num % 8)));
   }
 };
+}
 
 #endif

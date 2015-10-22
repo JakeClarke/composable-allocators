@@ -3,33 +3,31 @@
 
 #include "alloc-common.h"
 
-template<typename threadlocalalloc>
-class ThreadLocalAlloc
-{
-public:
-	Block allocate(size_t size) {
-		return tll.allocate(size);
-	}
+namespace compalloc {
 
-	void deallocate(Block blk) {
-		tll.deallocate(blk);
-	}
+template <typename threadlocalalloc>
+class ThreadLocalAlloc {
+ public:
+  Block allocate(size_t size) { return tll.allocate(size); }
 
-	bool owns(Block blk) {
-		return tll.owns(blk);
-	}
+  void deallocate(Block blk) { tll.deallocate(blk); }
 
-	bool reallocate(Block &blk, size_t delta) {
-		return tll.reallocate(blk, delta);
-	}
+  bool owns(Block blk) { return tll.owns(blk); }
 
-	static constexpr size_t goodSize(size_t size) {
-		return threadlocalalloc::goodSize(size);
-	}
-private:
-	static thread_local threadlocalalloc tll;
+  bool reallocate(Block &blk, size_t delta) {
+    return tll.reallocate(blk, delta);
+  }
+
+  static constexpr size_t goodSize(size_t size) {
+    return threadlocalalloc::goodSize(size);
+  }
+
+ private:
+  static thread_local threadlocalalloc tll;
 };
 
-template<typename t> thread_local t ThreadLocalAlloc<t>::tll;
+template <typename t>
+thread_local t ThreadLocalAlloc<t>::tll;
+} // compalloc
 
 #endif

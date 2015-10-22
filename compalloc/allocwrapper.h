@@ -5,6 +5,8 @@
 
 #include <cstring>
 
+namespace compalloc {
+
 struct MemHeader {
   size_t size;
 };
@@ -111,5 +113,6 @@ class AllocWrapper : private alloc {
     }
   }
 };
+} // compalloc
 
 #endif

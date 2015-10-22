@@ -3,6 +3,8 @@
 
 #include "alloc-common.h"
 
+namespace compalloc {
+
 template <size_t numSlots>
 class FreeListAlloc {
  public:
@@ -14,7 +16,7 @@ class FreeListAlloc {
 
     for (size_t i = 0; i < numSlots; ++i) {
       if (slots[i].size == size) {
-      	auto temp = slots[i];
+        auto temp = slots[i];
         blk = slots[i];
         slots[i] = temp;
         usedSlots--;
@@ -26,7 +28,7 @@ class FreeListAlloc {
   }
 
   void deallocate(Block blk) {
-    //assert(usedSlots < numSlots);
+    // assert(usedSlots < numSlots);
 
     for (size_t i = 0; i < numSlots; i++) {
       if (slots[i].ptr == nullptr) {
@@ -37,9 +39,7 @@ class FreeListAlloc {
     }
   }
 
-  bool reallocate(Block &blk, size_t delta) {
-  	return false;
-  }
+  bool reallocate(Block &blk, size_t delta) { return false; }
 
   bool owns(Block) { return usedSlots < numSlots; }
 
@@ -48,6 +48,7 @@ class FreeListAlloc {
  private:
   Block slots[numSlots];
   size_t usedSlots;
-};;
+};
+}
 
 #endif

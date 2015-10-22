@@ -4,6 +4,8 @@
 #include "alloc-common.h"
 #include <cstdlib>
 
+namespace compalloc {
+
 class Mallocator {
  public:
   Block allocate(size_t size) {
@@ -20,16 +22,17 @@ class Mallocator {
   bool owns(Block) { return true; }
 
   bool reallocate(Block &blk, size_t delta) {
-  	const auto newSize = blk.size + delta;
-  	const auto ptr = realloc(blk.ptr, newSize);
-  	if (ptr != nullptr) {
-  		blk = {ptr, newSize};
-  		return true;
-  	}
-  	return false;
+    const auto newSize = blk.size + delta;
+    const auto ptr = realloc(blk.ptr, newSize);
+    if (ptr != nullptr) {
+      blk = {ptr, newSize};
+      return true;
+    }
+    return false;
   }
 
   static constexpr size_t goodSize(size_t size) { return size; }
 };
+}
 
 #endif
