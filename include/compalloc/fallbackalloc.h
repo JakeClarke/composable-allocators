@@ -1,5 +1,5 @@
-#ifndef _H_FALLBACK_ALLOC
-#define _H_FALLBACK_ALLOC
+#ifndef _H_INCLUDE_COMPALLOC_FALLBACK_ALLOC
+#define _H_INCLUDE_COMPALLOC_FALLBACK_ALLOC
 
 #include "alloc-common.h"
 

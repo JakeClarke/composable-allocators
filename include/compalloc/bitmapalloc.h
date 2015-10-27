@@ -1,5 +1,5 @@
-#ifndef _H_BIT_MAP_ALLOC
-#define _H_BIT_MAP_ALLOC
+#ifndef _H_INCLUDE_COMPALLOC_BIT_MAP_ALLOC
+#define _H_INCLUDE_COMPALLOC_BIT_MAP_ALLOC
 
 #include "alloc-common.h"
 #include <cstdint>

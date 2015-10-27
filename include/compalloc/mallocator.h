@@ -1,5 +1,5 @@
-#ifndef _H_MALLOCATOR
-#define _H_MALLOCATOR
+#ifndef _H_INCLUDE_COMPALLOC_MALLOCATOR
+#define _H_INCLUDE_COMPALLOC_MALLOCATOR
 
 #include "alloc-common.h"
 #include <cstdlib>

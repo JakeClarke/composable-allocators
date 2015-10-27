@@ -1,5 +1,5 @@
-#ifndef _H_FREE_LIST_ALLOC
-#define _H_FREE_LIST_ALLOC
+#ifndef _H_INCLUDE_COMPALLOC_FREE_LIST_ALLOC
+#define _H_INCLUDE_COMPALLOC_FREE_LIST_ALLOC
 
 #include "alloc-common.h"
 

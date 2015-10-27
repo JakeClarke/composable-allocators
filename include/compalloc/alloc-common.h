@@ -1,5 +1,5 @@
-#ifndef _H_ALLOC_COMMON
-#define _H_ALLOC_COMMON
+#ifndef _H_INCLUDE_COMPALLOC_ALLOC_COMMON_H
+#define _H_INCLUDE_COMPALLOC_ALLOC_COMMON_H
 
 #include <cstddef>
 #include <cstring>

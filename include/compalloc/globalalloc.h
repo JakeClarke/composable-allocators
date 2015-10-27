@@ -1,5 +1,5 @@
-#ifndef _H_GLOBALALLOC
-#define _H_GLOBALALLOC
+#ifndef _H_INCLUDE_COMPALLOC_GLOBALALLOC
+#define _H_INCLUDE_COMPALLOC_GLOBALALLOC
 
 #include "alloc-common.h"
 

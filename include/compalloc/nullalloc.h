@@ -1,5 +1,5 @@
-#ifndef _H_NULLALLOC
-#define _H_NULLALLOC
+#ifndef _H_INCLUDE_COMPALLOC_NULLALLOC
+#define _H_INCLUDE_COMPALLOC_NULLALLOC
 
 #include "alloc-common.h"
 #include <cassert>

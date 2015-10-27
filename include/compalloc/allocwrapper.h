@@ -1,5 +1,5 @@
-#ifndef _H_ALLOCWRAPPER
-#define _H_ALLOCWRAPPER
+#ifndef _H_INCLUDE_COMPALLOC_ALLOCWRAPPER
+#define _H_INCLUDE_COMPALLOC_ALLOCWRAPPER
 
 #include "alloc-common.h"
 
