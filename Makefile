@@ -17,6 +17,8 @@ TESTS = mallocator_unittests nullallocator_unittests fallbackalloc_unittests seg
 
 TESTS_DIR = tests
 
+ALLOCS_DIR = include/compalloc
+
 # Target
 
 test: $(TESTS)
@@ -43,7 +45,7 @@ gtest_main.a: gtest-all.o gtest_main.o
 ## My tests
 
 # malloc tests
-mallocator_unittests.o: $(TESTS_DIR)/mallocator_unittests.cpp mallocator.h $(GTEST_HEADERS)
+mallocator_unittests.o: $(TESTS_DIR)/mallocator_unittests.cpp $(ALLOCS_DIR)/mallocator.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/mallocator_unittests.cpp
 
 mallocator_unittests: gtest_main.a mallocator_unittests.o
@@ -51,7 +53,7 @@ mallocator_unittests: gtest_main.a mallocator_unittests.o
 	./$@
 
 # null alloc tests
-nullallocator_unittests.o: $(TESTS_DIR)/nullallocator_unittests.cpp nullalloc.h $(GTEST_HEADERS)
+nullallocator_unittests.o: $(TESTS_DIR)/nullallocator_unittests.cpp $(ALLOCS_DIR)/nullalloc.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/nullallocator_unittests.cpp
 
 nullallocator_unittests: gtest_main.a nullallocator_unittests.o
@@ -59,7 +61,7 @@ nullallocator_unittests: gtest_main.a nullallocator_unittests.o
 	./$@
 
 # fall back tests
-fallbackalloc_unittests.o: $(TESTS_DIR)/fallbackalloc_unittests.cpp fallbackalloc.h $(GTEST_HEADERS)
+fallbackalloc_unittests.o: $(TESTS_DIR)/fallbackalloc_unittests.cpp $(ALLOCS_DIR)/fallbackalloc.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/fallbackalloc_unittests.cpp
 
 fallbackalloc_unittests: gtest_main.a fallbackalloc_unittests.o
@@ -67,7 +69,7 @@ fallbackalloc_unittests: gtest_main.a fallbackalloc_unittests.o
 	./$@
 
 # segregated tests
-segregatedalloc_unittests.o: $(TESTS_DIR)/segregatedalloc_unittests.cpp segregatedalloc.h $(GTEST_HEADERS)
+segregatedalloc_unittests.o: $(TESTS_DIR)/segregatedalloc_unittests.cpp $(ALLOCS_DIR)/segregatedalloc.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/segregatedalloc_unittests.cpp
 
 segregatedalloc_unittests: gtest_main.a segregatedalloc_unittests.o
@@ -75,7 +77,7 @@ segregatedalloc_unittests: gtest_main.a segregatedalloc_unittests.o
 	./$@
 
 # wrapper tests
-allocwrapper_unittests.o: $(TESTS_DIR)/allocwrapper_unittests.cpp allocwrapper.h $(GTEST_HEADERS)
+allocwrapper_unittests.o: $(TESTS_DIR)/allocwrapper_unittests.cpp $(ALLOCS_DIR)/allocwrapper.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/allocwrapper_unittests.cpp
 
 allocwrapper_unittests: gtest_main.a allocwrapper_unittests.o
@@ -83,7 +85,7 @@ allocwrapper_unittests: gtest_main.a allocwrapper_unittests.o
 	./$@
 
 # stackalloctor tests
-stackallocator_unittests.o: $(TESTS_DIR)/stackallocator_unittests.cpp stackallocator.h $(GTEST_HEADERS)
+stackallocator_unittests.o: $(TESTS_DIR)/stackallocator_unittests.cpp $(ALLOCS_DIR)/stackallocator.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/stackallocator_unittests.cpp
 
 stackallocator_unittests: gtest_main.a stackallocator_unittests.o
@@ -91,7 +93,7 @@ stackallocator_unittests: gtest_main.a stackallocator_unittests.o
 	./$@
 
 # bitmap alloc tests
-bitmapalloc_unittests.o: $(TESTS_DIR)/bitmapalloc_unittests.cpp bitmapalloc.h $(GTEST_HEADERS)
+bitmapalloc_unittests.o: $(TESTS_DIR)/bitmapalloc_unittests.cpp $(ALLOCS_DIR)/bitmapalloc.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/bitmapalloc_unittests.cpp
 
 bitmapalloc_unittests: gtest_main.a bitmapalloc_unittests.o
@@ -99,7 +101,7 @@ bitmapalloc_unittests: gtest_main.a bitmapalloc_unittests.o
 	./$@
 
 # Thread local unit tests
-threadlocal_unittests.o: $(TESTS_DIR)/threadlocal_unittests.cpp bitmapalloc.h $(GTEST_HEADERS)
+threadlocal_unittests.o: $(TESTS_DIR)/threadlocal_unittests.cpp $(ALLOCS_DIR)/bitmapalloc.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TESTS_DIR)/threadlocal_unittests.cpp
 
 threadlocal_unittests: gtest_main.a threadlocal_unittests.o

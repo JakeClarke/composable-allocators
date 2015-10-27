@@ -1,7 +1,9 @@
 // malloc test
-#include "../nullalloc.h"
+#include "../include/compalloc/nullalloc.h"
 
 #include <gtest/gtest.h>
+
+using namespace compalloc;
 
 using AllocToTest = NullAlloc;
 

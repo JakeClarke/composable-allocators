@@ -1,12 +1,14 @@
-#include "../mallocator.h"
-#include "../segregatedalloc.h"
-#include "../nullalloc.h"
+#include "../include/compalloc/mallocator.h"
+#include "../include/compalloc/segregatedalloc.h"
+#include "../include/compalloc/nullalloc.h"
 
 #include <gtest/gtest.h>
 
 const size_t threshold = sizeof(char) * 1024;
 const size_t bigThing = sizeof(char) * 2000;
 const size_t smallThing = sizeof(char) * 20;
+
+using namespace compalloc;
 
 using AllocBig = SegregatedAlloc<NullAlloc,Mallocator, threshold>;
 using AllocSmall = SegregatedAlloc<Mallocator, NullAlloc, threshold>;

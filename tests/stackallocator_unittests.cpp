@@ -1,6 +1,8 @@
-#include "../stackallocator.h"
+#include "../include/compalloc/stackallocator.h"
 
 #include <gtest/gtest.h>
+
+using namespace compalloc;
 
 using AllocToTest = StackAllocator<1024>;
 

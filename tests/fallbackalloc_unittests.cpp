@@ -1,8 +1,10 @@
-#include "../mallocator.h"
-#include "../fallbackalloc.h"
-#include "../nullalloc.h"
+#include "../include/compalloc/mallocator.h"
+#include "../include/compalloc/fallbackalloc.h"
+#include "../include/compalloc/nullalloc.h"
 
 #include <gtest/gtest.h>
+
+using namespace compalloc;
 
 using AllocToTest = FallBackAlloc<NullAlloc,Mallocator>;
 

@@ -1,7 +1,9 @@
-#include "../allocwrapper.h"
-#include "../mallocator.h"
+#include "../include/compalloc/allocwrapper.h"
+#include "../include/compalloc/mallocator.h"
 
 #include <gtest/gtest.h>
+
+using namespace compalloc;
 
 using AllocToTest = AllocWrapper<Mallocator>;
 

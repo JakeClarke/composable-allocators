@@ -1,9 +1,11 @@
-#include "../threadlocalalloc.h"
-#include "../stackallocator.h"
+#include "../include/compalloc/threadlocalalloc.h"
+#include "../include/compalloc/stackallocator.h"
 
 #include <gtest/gtest.h>
 #include <chrono>
 #include <thread>
+
+using namespace compalloc;
 
 using AllocToTest = ThreadLocalAlloc<StackAllocator<1024>>;
 

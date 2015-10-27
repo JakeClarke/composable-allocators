@@ -1,10 +1,12 @@
-#include "../bitmapalloc.h"
-#include "../mallocator.h"
+#include "../include/compalloc/bitmapalloc.h"
+#include "../include/compalloc/mallocator.h"
 
 #include <gtest/gtest.h>
 
 #define BLOCKSIZE (4 * 1024)
 #define NUM_BLOCKS (256)
+
+using namespace compalloc;
 
 using AllocToTest = BitMapAlloc<Mallocator,BLOCKSIZE,NUM_BLOCKS>;
 
