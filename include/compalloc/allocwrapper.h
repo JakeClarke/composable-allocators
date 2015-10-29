@@ -1,5 +1,5 @@
-#ifndef _H_INCLUDE_COMPALLOC_ALLOCWRAPPER
-#define _H_INCLUDE_COMPALLOC_ALLOCWRAPPER
+#ifndef _H_ALLOCWRAPPER
+#define _H_ALLOCWRAPPER
 
 #include "alloc-common.h"
 
@@ -56,7 +56,7 @@ class AllocWrapper : private alloc {
     const size_t tailOffset =
         getHeader(ptr)->size -
         (sizeof(MemTailer) +
-         utils::roundToAlignment(sizeof(MemHeader), alignment()));
+         utils::roundToAlignment(sizeof(MemHeader), alignment));
     auto tlrPtr = (char*)ptr;
     tlrPtr = tlrPtr + tailOffset;
     return (MemTailer*)tlrPtr;
@@ -70,7 +70,7 @@ class AllocWrapper : private alloc {
 
   static MemHeader* getHeader(void* ptr) {
     auto p = (char*)ptr;
-    p = p - utils::roundToAlignment(sizeof(MemHeader), alignment());
+    p = p - utils::roundToAlignment(sizeof(MemHeader), alignment);
     return (MemHeader*)p;
   }
 
@@ -79,27 +79,27 @@ class AllocWrapper : private alloc {
   static Block getBlock(void* ptr) {
     MemHeader* hdr =
         (MemHeader*)(((char*)ptr) -
-                     utils::roundToAlignment(sizeof(MemHeader), alignment()));
+                     utils::roundToAlignment(sizeof(MemHeader), alignment));
     return {hdr, hdr->size};
   }
 
   static void* getDataBegin(Block blk) {
     return (char*)blk.ptr +
-           utils::roundToAlignment(sizeof(MemHeader), alignment());
+           utils::roundToAlignment(sizeof(MemHeader), alignment);
   }
 
   static constexpr size_t goodSize(size_t size) {
     return alloc::goodSize(
-        utils::roundToAlignment(sizeof(MemHeader), alignment()) +
-        utils::roundToAlignment(size + sizeof(MemTailer), alignment()));
+        utils::roundToAlignment(sizeof(MemHeader), alignment) +
+        utils::roundToAlignment(size + sizeof(MemTailer), alignment));
   }
 
   static constexpr size_t dataSize(Block blk) {
-    return blk.size - (utils::roundToAlignment(sizeof(MemHeader), alignment()) +
+    return blk.size - (utils::roundToAlignment(sizeof(MemHeader), alignment) +
                        sizeof(MemTailer));
   }
 
-  static constexpr size_t alignment() { return 16; }
+  static constexpr size_t alignment = alloc::alignment;
 
  private:
   static void putMetaData(const Block blk, const char* tag) {

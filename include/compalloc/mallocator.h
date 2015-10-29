@@ -32,6 +32,8 @@ class Mallocator {
   }
 
   static constexpr size_t goodSize(size_t size) { return size; }
+
+  static constexpr size_t alignment = 1;
 };
 }
 

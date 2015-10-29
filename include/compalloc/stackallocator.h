@@ -44,12 +44,12 @@ class StackAllocator {
   }
 
   static constexpr size_t goodSize(size_t size) {
-    return size + (allignment() - (size % allignment()));
+    return size + (allignment - (size % allignment));
   }
 
-  static constexpr size_t allignment() { return 16; }
+  static constexpr size_t allignment = 16;
 
-  static_assert(stackSize % allignment() == 0, "StackSize must be alligned");
+  static_assert(stackSize % allignment == 0, "StackSize must be alligned");
 
  private:
   bool lastAllocation(Block blk) {

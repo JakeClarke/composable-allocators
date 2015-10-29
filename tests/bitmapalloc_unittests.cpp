@@ -3,12 +3,12 @@
 
 #include <gtest/gtest.h>
 
-#define BLOCKSIZE (4 * 1024)
-#define NUM_BLOCKS (256)
+constexpr size_t blockSize = 4 * 1024;
+constexpr size_t numBlocks = 256;
 
 using namespace compalloc;
 
-using AllocToTest = BitMapAlloc<Mallocator,BLOCKSIZE,NUM_BLOCKS>;
+using AllocToTest = BitMapAlloc<Mallocator,blockSize,numBlocks>;
 
 TEST(BitMapAlloc, allocate) {
 	const auto size = sizeof(char) * 100;
@@ -32,14 +32,14 @@ TEST(BitMapAlloc, deallocate) {
 }
 
 TEST(BitMapAlloc, reallocate) {
-	const auto size = sizeof(char) * BLOCKSIZE;
+	const auto size = sizeof(char) * blockSize;
 
 	AllocToTest myAlloc;
 	auto blk = myAlloc.allocate(size);
 	ASSERT_NE(nullptr, blk.ptr);
 	ASSERT_GE(blk.size, size);
 
-	const auto delta = sizeof(char) * BLOCKSIZE;
+	const auto delta = sizeof(char) * blockSize;
 	ASSERT_TRUE(myAlloc.reallocate(blk, delta));
 }
 

@@ -49,9 +49,9 @@ class BitMapAlloc : private backing {
     }
   }
 
-  constexpr static size_t alignment() { return 16; }
+  constexpr static size_t alignment = 16;
 
-  static_assert(blockSize % alignment() == 0, "Blocks must be aligned");
+  static_assert(blockSize % alignment == 0, "Blocks must be aligned");
 
   constexpr static size_t goodSize(size_t a) {
     return a + (blockSize - (a % blockSize));

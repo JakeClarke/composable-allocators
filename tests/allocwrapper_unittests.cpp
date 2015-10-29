@@ -29,7 +29,7 @@ TEST(AllocWrapper, goodSize) {
 
 TEST(AllocWrapper, goodSizeAligned) {
 	const size_t size = sizeof(char) * 100;
-	ASSERT_EQ(0, AllocToTest::goodSize(size) % AllocToTest::alignment());
+	ASSERT_EQ(0, AllocToTest::goodSize(size) % AllocToTest::alignment);
 }
 
 #define TAG_STR "test-tag"
