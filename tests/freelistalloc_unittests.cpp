@@ -49,3 +49,18 @@ TEST(FreeListAlloc, goodSize) {
 	constexpr size_t allocSize = sizeof(testStruct);
 	ASSERT_GE(allocSize, AllocToTest::goodSize(allocSize));
 }
+
+TEST(FreeListAlloc, realloc) {
+	using AllocToTest = FreeListAlloc<Mallocator>;
+	constexpr size_t allocSize = sizeof(testStruct);
+	AllocToTest myAlloc;
+	auto blk = myAlloc.allocate(allocSize);
+	ASSERT_NE(blk.ptr, nullptr);
+	ASSERT_GE(blk.size, sizeof(allocSize));
+
+
+	constexpr size_t delta = 100;
+	ASSERT_TRUE(myAlloc.reallocate(blk, delta));
+	EXPECT_NE(blk.ptr, nullptr);
+	EXPECT_GE(blk.size, allocSize + delta);
+}
