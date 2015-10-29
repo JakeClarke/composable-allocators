@@ -5,49 +5,71 @@
 
 namespace compalloc {
 
-template <size_t numSlots>
-class FreeListAlloc {
+template <class alloc>
+class FreeListAlloc : private alloc {
  public:
+  FreeListAlloc():size(0), root({nullptr, 0}), tail(&root) {
+
+  }
+
   Block allocate(size_t size) {
-    Block blk = {nullptr, 0};
-    if (usedSlots == 0) {
-      return blk;
+    if (size == 0) {
+      return alloc::allocate(size);
     }
 
-    for (size_t i = 0; i < numSlots; ++i) {
-      if (slots[i].size == size) {
-        auto temp = slots[i];
-        blk = slots[i];
-        slots[i] = temp;
-        usedSlots--;
-        break;
+    Block *curr = &root;
+    Block *prev = nullptr;
+    while (curr->ptr != nullptr && curr->size != goodSize(size)) {
+      prev = curr;
+      curr = next(*curr);
+    }
+    if (curr->ptr != nullptr) {
+      if (curr == tail) {
+        tail = prev;
+      } else {
+        prev = next(*curr);
       }
-    }
 
-    return blk;
+      --size;
+      return *curr;
+    } else {
+      return alloc::allocate(size);
+    }
   }
 
   void deallocate(Block blk) {
     // assert(usedSlots < numSlots);
+    *tail = blk;
+    tail = next(*tail);
+    *tail = {nullptr, 0};
+    ++size;
+  }
 
-    for (size_t i = 0; i < numSlots; i++) {
-      if (slots[i].ptr == nullptr) {
-        slots[i] = blk;
-        usedSlots++;
-        return;
-      }
+  bool reallocate(Block &blk, size_t delta) {
+    return alloc::reallocate(blk, delta);
+  }
+
+  bool owns(Block blk) { return alloc::owns(blk); }
+
+  constexpr static size_t goodSize(size_t size) {
+    return alloc::goodSize(size);
+  }
+
+  ~FreeListAlloc() {
+    Block curr = root, n;
+    while (curr.ptr != nullptr) {
+      n = *next(curr);
+      alloc::deallocate(curr);
+      curr = n;
     }
   }
 
-  bool reallocate(Block &blk, size_t delta) { return false; }
-
-  bool owns(Block) { return usedSlots < numSlots; }
-
-  constexpr static size_t goodSize(size_t size) { return size; }
-
  private:
-  Block slots[numSlots];
-  size_t usedSlots;
+  Block *next(Block blk) { return static_cast<Block *>(blk.ptr); }
+
+  Block root;
+  Block *tail;
+  size_t size;
 };
 }
 
