@@ -60,7 +60,7 @@ class BitMapAlloc : private backing {
   bool owns(Block blk) {
     if (blk.ptr >= root.ptr &&
         blk.ptr <= ((char *)root.ptr) + (blockSize * numBlocks) &&
-        ((char *)blk.ptr - (char *)root.ptr) % blockSize == 0) {
+        (static_cast<char *>(blk.ptr) - static_cast<char*>(root.ptr)) % blockSize == 0) {
       return true;
     }
     return false;
@@ -93,7 +93,7 @@ class BitMapAlloc : private backing {
   }
 
   size_t getBlkNum(void *ptr) {
-    return ((size_t)ptr - (size_t)root.ptr) / blockSize;
+    return (reinterpret_cast<size_t>(ptr) - reinterpret_cast<size_t>(root.ptr)) / blockSize;
   }
 
   static constexpr size_t getMapByteNum(size_t num) { return num / 8; }

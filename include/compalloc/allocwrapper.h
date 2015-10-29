@@ -57,41 +57,39 @@ class AllocWrapper : private alloc {
         getHeader(ptr)->size -
         (sizeof(MemTailer) +
          utils::roundToAlignment(sizeof(MemHeader), alignment));
-    auto tlrPtr = (char*)ptr;
-    tlrPtr = tlrPtr + tailOffset;
-    return (MemTailer*)tlrPtr;
+    auto tlrPtr = static_cast<char*>(ptr) + tailOffset;
+    return reinterpret_cast<MemTailer*>(tlrPtr);
   }
 
   static MemTailer* getTailer(Block blk) {
-    auto tlrPtr = (char*)blk.ptr;
-    tlrPtr = tlrPtr + (blk.size - sizeof(MemTailer));
-    return (MemTailer*)tlrPtr;
+    auto tlrPtr = static_cast<char*>(blk.ptr) + (blk.size - sizeof(MemTailer));
+    return reinterpret_cast<MemTailer*>(tlrPtr);
   }
 
   static MemHeader* getHeader(void* ptr) {
-    auto p = (char*)ptr;
+    auto p = static_cast<char*>(ptr);
     p = p - utils::roundToAlignment(sizeof(MemHeader), alignment);
-    return (MemHeader*)p;
+    return reinterpret_cast<MemHeader*>(p);
   }
 
   static MemHeader* getHeader(Block blk) { return (MemHeader*)blk.ptr; }
 
   static Block getBlock(void* ptr) {
-    MemHeader* hdr =
-        (MemHeader*)(((char*)ptr) -
-                     utils::roundToAlignment(sizeof(MemHeader), alignment));
+    MemHeader* hdr = reinterpret_cast<MemHeader*>(
+        static_cast<char*>(ptr) -
+        utils::roundToAlignment(sizeof(MemHeader), alignment));
     return {hdr, hdr->size};
   }
 
   static void* getDataBegin(Block blk) {
-    return (char*)blk.ptr +
+    return static_cast<char*>(blk.ptr) +
            utils::roundToAlignment(sizeof(MemHeader), alignment);
   }
 
   static constexpr size_t goodSize(size_t size) {
     return alloc::goodSize(
-        utils::roundToAlignment(sizeof(MemHeader), alignment) +
-        utils::roundToAlignment(size + sizeof(MemTailer), alignment));
+        utils::roundToAlignment(sizeof(MemHeader), alignment) + size +
+        sizeof(MemTailer));
   }
 
   static constexpr size_t dataSize(Block blk) {
@@ -113,6 +111,6 @@ class AllocWrapper : private alloc {
     }
   }
 };
-} // compalloc
+}  // compalloc
 
 #endif
